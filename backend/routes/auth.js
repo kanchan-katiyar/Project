@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -15,9 +15,8 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Determine role: if first user, make Admin, else Member
-    const userCount = await prisma.user.count();
-    const role = userCount === 0 ? 'Admin' : 'Member';
+    // Determine role: Use provided role or default to 'Member'
+    const finalRole = role && ['Admin', 'Member'].includes(role) ? role : 'Member';
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -29,7 +28,7 @@ router.post('/register', async (req, res) => {
         name,
         email,
         password: hashedPassword,
-        role
+        role: finalRole
       }
     });
 

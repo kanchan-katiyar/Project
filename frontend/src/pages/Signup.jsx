@@ -6,6 +6,7 @@ const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('Member');
   const [error, setError] = useState('');
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register(name, email, password);
+      await register(name, email, password, role);
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Signup failed');
@@ -63,6 +64,18 @@ const Signup = () => {
                 required 
                 placeholder="Min. 6 characters"
               />
+            </div>
+            <div className="form-group">
+              <label>Select Role</label>
+              <select 
+                value={role} 
+                onChange={(e) => setRole(e.target.value)}
+                required
+                style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid #d1d5db', fontSize: '1rem', marginTop: '0.25rem', backgroundColor: '#f9fafb' }}
+              >
+                <option value="Member">Member</option>
+                <option value="Admin">Admin</option>
+              </select>
             </div>
             <button type="submit" className="btn w-100" style={{ marginTop: '1rem' }}>Sign Up</button>
           </form>
