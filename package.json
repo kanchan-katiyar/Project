@@ -6,7 +6,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "cd frontend && npm install && npm run build && cd ../backend && npm install && npx prisma generate",
+    "build": "cd frontend && npm install && npm run build && cd ../backend && npm install && DATABASE_URL=\"file:./dev.db\" npx prisma generate",
     "start": "cd backend && npx prisma db push && node index.js"
   }
 }
